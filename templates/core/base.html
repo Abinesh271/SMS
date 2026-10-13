@@ -1,0 +1,209 @@
+
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}Acadexa Education{% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'css/styling.css' %}">
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <h1>Acadexa Education</h1>
+                <span>Student Registrations</span>
+            </div>
+        </div>
+
+        <div class="menu-label">MAIN MENU</div>
+
+        <nav class="side-nav">
+
+            <a href="{% url 'dashboard' %}"
+               class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+
+                <span class="nav-icon">◔</span>
+                <span>Dashboard</span>
+
+            </a>
+
+            <a href="{% url 'student_list' %}"
+               class="nav-item {% if request.resolver_match.url_name == 'student_list' %}active{% endif %}">
+
+                <span class="nav-icon">👨‍🎓</span>
+                <span>Student Directory</span>
+
+            </a>
+
+            <a href="{% url 'student_create' %}"
+               class="nav-item {% if request.resolver_match.url_name == 'student_create' %}active{% endif %}">
+
+                <span class="nav-icon">＋</span>
+                <span>Register Student</span>
+
+            </a>
+
+        </nav>
+
+        <div class="menu-label course-label">COURSES</div>
+
+        <div class="course-links">
+            <span>Computer Science <b>•</b></span>
+            <span>Data Science <b>•</b></span>
+            <span>UI/UX Design <b>•</b></span>
+            <span>Business Admin <b>•</b></span>
+            <span>Python fullstack <b>•</b></span>
+            <span>Java fullstack <b>•</b></span>
+        </div>
+
+        <!-- User Profile -->
+        <div class="profile-card">
+
+            <div class="avatar">
+                {{ request.user.username|first|upper }}
+            </div>
+
+            <div class="profile-text">
+
+                <strong>
+                    {{ request.user.get_full_name|default:request.user.username }}
+                </strong>
+
+                <small>Regular User</small>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+
+            <button class="mobile-menu-btn"
+                    id="mobileMenuBtn"
+                    type="button">
+                ☰
+            </button>
+
+            <div class="page-heading">
+
+                <h2>
+                    {% block page_title %}
+                        Dashboard Overview
+                    {% endblock %}
+                </h2>
+
+                <p>
+                    {% block page_subtitle %}
+                        Welcome back, here is your institution snapshot.
+                    {% endblock %}
+                </p>
+
+            </div>
+
+
+            <!-- Top Actions -->
+            <div class="top-actions">
+
+                <!-- Search -->
+                <form action="{% url 'student_list' %}"
+                      method="get"
+                      class="quick-search">
+
+                    <span>⌕</span>
+
+                    <input type="text"
+                           name="q"
+                           placeholder="Quick search student..."
+                           value="{{ request.GET.q }}">
+
+                </form>
+
+
+                <!-- Add Student -->
+                <a href="{% url 'student_create' %}"
+                   class="btn primary">
+
+                    ＋ Add Student
+
+                </a>
+
+
+                <!-- Logout -->
+                <form method="post"
+                      action="{% url 'logout' %}"
+                      class="logout-form">
+
+                    {% csrf_token %}
+
+                    <button type="submit"
+                            class="logout-btn">
+
+                        Logout
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </header>
+
+
+        <!-- Django Messages -->
+        {% if messages %}
+
+            <div class="messages">
+
+                {% for message in messages %}
+
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- Page Content -->
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+</div>
+
+
+<!-- JavaScript -->
+<script src="{% static 'js/script.js' %}"></script>
+
+</body>
+</html>
+

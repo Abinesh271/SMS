@@ -1,0 +1,189 @@
+
+{% extends "core/base.html" %}
+
+{% block title %}Students | Acadexa Education{% endblock %}
+
+{% block page_title %}Student Directory{% endblock %}
+
+{% block page_subtitle %}
+Search, view and manage your registered students.
+{% endblock %}
+
+{% block content %}
+
+<section class="content-card">
+
+    <div class="section-head directory-head">
+
+        <div>
+            <h3>All Students</h3>
+            <p>
+                {{ page_obj.paginator.count }}
+                matching record{{ page_obj.paginator.count|pluralize }}
+            </p>
+        </div>
+
+        <a class="btn primary" href="{% url 'student_create' %}">
+            ＋ Add Student
+        </a>
+
+    </div>
+
+    <form method="get" class="filter-bar">
+
+        <input
+            name="q"
+            value="{{ query }}"
+            placeholder="Search name, email or mobile..."
+        >
+
+        <select name="course">
+
+            <option value="">All courses</option>
+
+            {% for value, label in courses %}
+                <option value="{{ value }}"
+                    {% if selected_course == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <button class="btn secondary" type="submit">
+            Search
+        </button>
+
+        <a class="btn ghost" href="{% url 'student_list' %}">
+            Clear
+        </a>
+
+    </form>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Mobile</th>
+                    <th>Course</th>
+                    <th>Age</th>
+                    <th>Registered</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for student in students %}
+
+                <tr>
+
+                    <td>
+                        <div class="table-person">
+
+                            <span class="initial">
+                                {{ student.full_name|slice:":2"|upper }}
+                            </span>
+
+                            <div>
+                                <strong>{{ student.full_name }}</strong>
+                                <small>{{ student.email }}</small>
+                            </div>
+
+                        </div>
+                    </td>
+
+                    <td>{{ student.mobile }}</td>
+
+                    <td>
+                        <span class="course-pill">
+                            {{ student.course }}
+                        </span>
+                    </td>
+
+                    <td>{{ student.age }}</td>
+
+                    <td>
+                        {{ student.created_at|date:"M d, Y" }}
+                    </td>
+
+                    <td class="actions">
+
+                        <a
+                            href="{% url 'student_update' student.id %}"
+                            class="icon-btn"
+                            title="Edit"
+                        >
+                            ✎
+                        </a>
+
+                        <form
+                            method="post"
+                            action="{% url 'student_delete' student.id %}"
+                            class="delete-form"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                class="icon-btn danger"
+                                type="submit"
+                                title="Delete"
+                            >
+                                ⌫
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+                    <td colspan="6" class="empty">
+                        No matching students found.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% if page_obj.has_other_pages %}
+
+    <div class="pagination">
+
+        {% if page_obj.has_previous %}
+            <a href="?q={{ query }}&course={{ selected_course }}&page={{ page_obj.previous_page_number }}">
+                ← Previous
+            </a>
+        {% endif %}
+
+        <span>
+            Page {{ page_obj.number }}
+            of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?q={{ query }}&course={{ selected_course }}&page={{ page_obj.next_page_number }}">
+                Next →
+            </a>
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
+

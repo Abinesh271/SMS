@@ -1,0 +1,218 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}
+Dashboard | Acadexa Education
+{% endblock %}
+
+{% block page_title %}
+Dashboard Overview
+{% endblock %}
+
+{% block page_subtitle %}
+Welcome back, here is your institution snapshot.
+{% endblock %}
+
+
+{% block content %}
+
+
+<section class="stats-grid">
+
+    <div class="stat-card">
+
+        <div class="stat-content">
+            <span class="stat-title">
+                Total Students
+            </span>
+
+            <strong class="stat-number">
+                {{ total_students }}
+            </strong>
+
+            <small class="positive">
+                ● Your registered students
+            </small>
+        </div>
+
+        <div class="stat-icon purple">
+            👨‍🎓
+        </div>
+
+    </div>
+
+
+  
+    <div class="stat-card">
+
+        <div class="stat-content">
+            <span class="stat-title">
+                Active Courses
+            </span>
+
+            <strong class="stat-number">
+                {{ active_courses }}
+            </strong>
+
+            <small class="positive">
+                ● Courses in your records
+            </small>
+        </div>
+
+        <div class="stat-icon blue">
+            📚
+        </div>
+
+    </div>
+
+
+    <!-- Age -->
+    <div class="stat-card">
+
+        <div class="stat-content">
+            <span class="stat-title">
+                Average Age
+            </span>
+
+            <strong class="stat-number">
+                {{ average_age }}
+            </strong>
+
+            <small class="neutral">
+                ● Based on current records
+            </small>
+        </div>
+
+        <div class="stat-icon yellow">
+            👨‍🎓
+        </div>
+
+    </div>
+
+
+   
+    <div class="stat-card">
+
+        <div class="stat-content">
+            <span class="stat-title">
+                System Status
+            </span>
+
+            <strong class="stat-number live">
+                Live
+            </strong>
+
+            <small class="positive">
+                ● Database connected
+            </small>
+        </div>
+
+        <div class="stat-icon green">
+            ✓
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="content-card">
+
+    <div class="section-head">
+
+        <div>
+            <h3>
+                Recent Registrations
+            </h3>
+
+            <p>
+                Latest students added to your registry
+            </p>
+        </div>
+
+        <a
+            href="{% url 'student_list' %}"
+            class="text-link"
+        >
+            View All Directory →
+        </a>
+
+    </div>
+
+
+
+    <div class="student-list">
+
+        {% for student in recent_students %}
+
+        <div class="student-row">
+
+           
+            <div class="initial">
+                {{ student.full_name|slice:":2"|upper }}
+            </div>
+
+
+            <!-- Student Details -->
+            <div class="student-main">
+
+                <strong>
+                    {{ student.full_name }}
+                </strong>
+
+                <span>
+                    {{ student.email }}
+                </span>
+
+            </div>
+
+
+            <!-- Course -->
+            <span class="course-pill">
+                {{ student.course }}
+            </span>
+
+
+            <!-- Date -->
+            <span class="row-date">
+                {{ student.created_at|date:"M d, Y" }}
+            </span>
+
+
+            <!-- Edit -->
+            <a
+                href="{% url 'student_update' student.id %}"
+                class="icon-btn"
+                title="Edit Student"
+            >
+                ✎
+            </a>
+
+        </div>
+
+
+        {% empty %}
+
+   
+
+        <div class="empty">
+
+            <p>
+                No students registered yet.
+            </p>
+
+            <a href="{% url 'student_create' %}">
+                Register your first student
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

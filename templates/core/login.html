@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Acadexa Education</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/styling.css' %}">
+
+</head>
+
+<body class="auth-page">
+
+    <div class="auth-card">
+
+        <div class="auth-brand">
+
+            <div class="brand-icon">
+                A
+            </div>
+
+        </div>
+
+
+        <h2>
+            Welcome back
+        </h2>
+
+
+        <p class="muted">
+            Sign in to your Acadexa account.
+        </p>
+
+
+        <form method="post"
+              class="auth-form">
+
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="field-error">
+                    Invalid username or password.
+                </div>
+            {% endif %}
+
+
+            <label for="id_username">
+                Username
+            </label>
+
+            <input
+                type="text"
+                name="username"
+                id="id_username"
+                placeholder="Enter your username"
+                required
+            >
+
+
+            <label for="id_password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                id="id_password"
+                placeholder="Enter your password"
+                required
+            >
+
+
+            <button type="submit"
+                    class="btn primary full">
+
+                Login
+
+            </button>
+
+        </form>
+
+
+        <div class="auth-bottom">
+
+            Don't have an account?
+
+            <a href="{% url 'register' %}">
+                Create account
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | Acadexa Education</title>
+
+    <link rel="stylesheet" href="{% static 'css/styling.css' %}">
+</head>
+
+<body class="auth-page">
+
+<div class="auth-card register-card">
+
+    <div class="brand auth-brand">
+        <div class="brand-icon">🎓</div>
+
+        <div>
+            <h1>Acadexa Education</h1>
+            <span>Student Registry Pro</span>
+        </div>
+    </div>
+
+    <h2>Create your account</h2>
+
+    <p class="muted">
+        Register as a regular user.
+    </p>
+
+    <form method="post" class="auth-form">
+
+        {% csrf_token %}
+
+        {% for field in form %}
+
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+
+            {{ field }}
+
+            {% for error in field.errors %}
+                <small class="field-error">
+                    {{ error }}
+                </small>
+            {% endfor %}
+
+        {% endfor %}
+
+        <button class="btn primary full" type="submit">
+            Create Account
+        </button>
+
+    </form>
+
+    <p class="auth-bottom">
+        Already have an account?
+        <a href="{% url 'login' %}">Sign in</a>
+    </p>
+
+</div>
+
+</body>
+</html>
+
